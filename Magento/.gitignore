@@ -3,9 +3,10 @@
 /pub/static/
 /pub/media/catalog/product/cache/
 /pub/media/tmp/
+/pub/media/
 /pub/media/customer/
 /pub/media/wysiwyg/
-
+/pub/media/theme/preview
 # Ignore local environment config
 /app/etc/env.php
 

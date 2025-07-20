@@ -1,3 +1,9 @@
+#!/bin/bash
+
+echo "=== Installation de Magento ==="
+
+cd /var/www/html
+
 /var/www/html/bin/magento setup:install \
     --base-url=$MAGENTO_URL \
     --backend-frontname=$MAGENTO_BACKEND_FRONTNAME \
@@ -23,3 +29,9 @@
     --opensearch-index-prefix=magento2 \
     --opensearch-timeout=15 \
     --opensearch-enable-auth=false
+
+/var/www/html/bin/magento cron:install --force
+/var/www/html/bin/magento module:disable Magento_Csp Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
+
+/var/www/html/bin/magento cache:flush
+echo "=== Installation Magento terminée ==="

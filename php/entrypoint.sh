@@ -25,7 +25,7 @@ fi
 echo "=== Scripts de démarrage ==="
 if [ -d "/scripts/startup" ]; then
     for script in /scripts/startup/*.sh; do
-        if [ -x "$script" ]; then
+        if [ -f "$script" ]; then
             echo "Exécution: $(basename $script)"
             bash "$script"
         fi
