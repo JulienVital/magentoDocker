@@ -8,10 +8,13 @@ RUN a2enmod headers
 RUN a2enmod ssl
 RUN a2enmod expires
 
+# Disable default Apache site to avoid conflicts
+RUN a2dissite 000-default.conf
+
 RUN apt-get update \
   && apt-get install -y --no-install-recommends locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip curl gnupg libcurl4-openssl-dev pkg-config libssl-dev libmagickwand-dev imagemagick ghostscript cron
 
-  RUN pecl install xdebug \
+RUN pecl install xdebug \
   && docker-php-ext-enable xdebug \
   && echo "xdebug.mode=debug,develop,profile,coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
   && echo "xdebug.start_with_request=trigger" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
