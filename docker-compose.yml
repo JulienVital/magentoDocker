@@ -10,7 +10,7 @@ services:
             - ./php/vhosts:/etc/apache2/sites-enabled
             - ./php/php.ini:/usr/local/etc/php/php.ini
             - ./Magento:/var/www/html
-            - ./init.sh:/init.sh
+            - ./scripts:/scripts
 
         depends_on:
             - db

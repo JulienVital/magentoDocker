@@ -44,4 +44,10 @@ RUN set -eux; \
 # Change www-data UID/GID to match host user (1000:1000)
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
+# Copier le point d'entrée simple
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 WORKDIR /var/www/html
+
+ENTRYPOINT ["/entrypoint.sh"]
