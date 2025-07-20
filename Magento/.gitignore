@@ -1,0 +1,34 @@
+/generated/
+/var/
+/pub/static/
+/pub/media/catalog/product/cache/
+/pub/media/tmp/
+/pub/media/customer/
+/pub/media/wysiwyg/
+
+# Ignore local environment config
+/app/etc/env.php
+
+# Composer dependencies
+/vendor/
+
+# Node modules (if you use frontend tooling)
+node_modules/
+
+# Log files and reports
+/var/log/
+/var/report/
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.old
+*.orig
+
+# Other possible caches
+/.php_cs.cache
