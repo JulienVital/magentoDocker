@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Menu/etc/menu.xsd">
+    <menu>
+        <add id="ActivePublishing_Flipbook::main_menu"
+             title="Flipbook"
+             module="ActivePublishing_Flipbook"
+             sortOrder="100"
+             parent="Magento_Backend::content"
+             action="flipbook/index/index"
+             resource="ActivePublishing_Flipbook::main_menu"/>
+    </menu>
+</config>
