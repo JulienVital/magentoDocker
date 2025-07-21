@@ -4,7 +4,8 @@ echo "=== Installation de Magento ==="
 
 cd /var/www/html
 
-/var/www/html/bin/magento setup:install \
+# Forcer la limite de mémoire pour l'installation
+php -d memory_limit=2G /var/www/html/bin/magento setup:install \
     --base-url=$MAGENTO_URL \
     --backend-frontname=$MAGENTO_BACKEND_FRONTNAME \
     --language=$MAGENTO_LANGUAGE \
