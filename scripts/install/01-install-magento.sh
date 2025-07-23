@@ -32,7 +32,7 @@ php -d memory_limit=2G /var/www/html/bin/magento setup:install \
     --opensearch-enable-auth=false
 
 /var/www/html/bin/magento cron:install --force
-/var/www/html/bin/magento module:disable Magento_Csp Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
+/var/www/html/bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
 
 /var/www/html/bin/magento cache:flush
 echo "=== Installation Magento terminée ==="
