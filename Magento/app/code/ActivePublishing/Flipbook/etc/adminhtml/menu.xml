@@ -8,15 +8,16 @@
       dependsOnModule="ActivePublishing_Flipbook" 
       resource="ActivePublishing_Flipbook::Flipbook"/>
 
-      <add id="ActivePublishing_Flipbook::greetings_helloworld" 
+      <add id="ActivePublishing_Flipbook::manage_flipbook" 
       title="Manage Flipbook"
        module="ActivePublishing_Flipbook" 
        parent="ActivePublishing_Flipbook::Flipbook" 
        dependsOnModule="ActivePublishing_Flipbook" 
        action="flipbook/helloworld" 
-       resource="ActivePublishing_Flipbook::greetings"/>
+       resource="ActivePublishing_Flipbook::manage_flipbook"
+       />
 
-             <add id="ActivePublishing_Flipbook::create_flipbook" 
+      <add id="ActivePublishing_Flipbook::create_flipbook" 
       title="Create Flipbook"
        module="ActivePublishing_Flipbook" 
        parent="ActivePublishing_Flipbook::Flipbook" 
@@ -24,7 +25,7 @@
        action="flipbook/helloworld" 
        resource="ActivePublishing_Flipbook::greetings"/>
 
-             <add id="ActivePublishing_Flipbook::configuration" 
+      <add id="ActivePublishing_Flipbook::configuration" 
       title="Configuration"
        module="ActivePublishing_Flipbook" 
        parent="ActivePublishing_Flipbook::Flipbook" 

@@ -1,1 +1,1149 @@
-<p>Flipbook manage</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipbooks - Magento Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.4rem;
+            line-height: 1.36;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        /* Layout Magento */
+        .page-wrapper {
+            padding-left: 0;
+        }
+
+        .page-main {
+            padding: 3rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Breadcrumbs Magento */
+        .breadcrumbs {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumbs ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumbs li {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .breadcrumbs li:not(:last-child)::after {
+            content: '>';
+            margin: 0 1rem;
+            color: #ccc;
+        }
+
+        .breadcrumbs a {
+            color: #006bb4;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        /* Boutons Magento */
+        .action-primary {
+            background: #eb5202;
+            border: 1px solid #eb5202;
+            color: #fff;
+            padding: 0.7rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .action-primary:hover {
+            background: #ba4000;
+            border-color: #ba4000;
+        }
+
+        .action-secondary {
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 0.7rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .action-secondary:hover {
+            border-color: #999;
+            background: #f5f5f5;
+        }
+
+        .action-delete {
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #eb5202;
+            padding: 0.7rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-delete:hover {
+            background: #eb5202;
+            color: #fff;
+            border-color: #eb5202;
+        }
+
+        /* Messages Magento */
+        .messages {
+            margin-bottom: 2rem;
+        }
+
+        .message {
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid;
+            background: #fff;
+        }
+
+        .message-success {
+            border-left-color: #79a22e;
+            background: #f0f8e4;
+            color: #3d4a00;
+        }
+
+        .message-error {
+            border-left-color: #e22626;
+            background: #fdf2f2;
+            color: #333;
+        }
+
+        /* Grille de données Magento */
+        .admin__data-grid-wrap {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .admin__data-grid-header {
+            background: #f5f5f5;
+            border-bottom: 1px solid #ccc;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin__data-grid-filters {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .admin__control-text {
+            padding: 0.7rem 1rem;
+            border: 1px solid #ccc;
+            font-size: 1.4rem;
+            width: 25rem;
+        }
+
+        .admin__control-text:focus {
+            outline: none;
+            border-color: #006bb4;
+            box-shadow: 0 0 0 1px #006bb4;
+        }
+
+        .admin__control-select {
+            padding: 0.7rem 3rem 0.7rem 1rem;
+            border: 1px solid #ccc;
+            font-size: 1.4rem;
+            background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") no-repeat right 0.75rem center/1.5em 1.5em;
+            appearance: none;
+        }
+
+        .data-grid {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-grid thead {
+            background: #f5f5f5;
+        }
+
+        .data-grid th {
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            font-size: 1.3rem;
+        }
+
+        .data-grid td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 1.3rem;
+            vertical-align: middle;
+        }
+
+        .data-grid tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Status badges */
+        .grid-status {
+            padding: 0.3rem 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 1rem;
+            display: inline-block;
+        }
+
+        .status-enabled {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-disabled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Actions dans la grille */
+        .action-menu-item {
+            color: #006bb4;
+            text-decoration: none;
+            font-size: 1.3rem;
+            margin-right: 1rem;
+        }
+
+        .action-menu-item:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Magento */
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+        }
+
+        .modal-inner-wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            width: 90%;
+            max-width: 60rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: #f5f5f5;
+            padding: 2rem 3rem;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: #333;
+            margin: 0;
+        }
+
+        .action-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-close:hover {
+            color: #333;
+        }
+
+        .modal-content {
+            padding: 3rem;
+        }
+
+        /* Formulaires Magento */
+        .admin__fieldset {
+            margin-bottom: 2rem;
+        }
+
+        .admin__legend {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .admin__field {
+            margin-bottom: 2rem;
+        }
+
+        .admin__field-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .admin__field-control {
+            position: relative;
+        }
+
+        .admin__control-text,
+        .admin__control-textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ccc;
+            font-size: 1.4rem;
+            font-family: inherit;
+        }
+
+        .admin__control-text:focus,
+        .admin__control-textarea:focus {
+            outline: none;
+            border-color: #006bb4;
+            box-shadow: 0 0 0 1px #006bb4;
+        }
+
+        .admin__control-textarea {
+            resize: vertical;
+            min-height: 8rem;
+        }
+
+        /* File upload Magento style */
+        .admin__field-file {
+            border: 2px dashed #ccc;
+            padding: 3rem;
+            text-align: center;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin__field-file:hover {
+            border-color: #006bb4;
+            background: #f0f8ff;
+        }
+
+        .admin__field-file.dragover {
+            border-color: #006bb4;
+            background: #f0f8ff;
+        }
+
+        .file-uploader-area {
+            color: #666;
+        }
+
+        .file-uploader-button {
+            background: #006bb4;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .file-uploader-button:hover {
+            background: #005a9e;
+        }
+
+        /* Pagination Magento */
+        .admin__data-grid-pager {
+            background: #f5f5f5;
+            border-top: 1px solid #ccc;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin__data-grid-pager-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Toolbar actions */
+        .admin__data-grid-toolbar {
+            background: #f5f5f5;
+            border-bottom: 1px solid #ccc;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin__data-grid-toolbar-left {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-main {
+                padding: 1.5rem;
+            }
+
+            .page-title-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .admin__data-grid-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .admin__data-grid-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .admin__control-text {
+                width: 100%;
+            }
+
+            .modal-inner-wrap {
+                width: 95%;
+                margin: 2rem;
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .data-grid {
+                font-size: 1.2rem;
+            }
+
+            .data-grid th,
+            .data-grid td {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #eb5202;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="page-main">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="#">Tableau de bord</a></li>
+                    <li><a href="#">Contenu</a></li>
+                    <li>Flipbooks</li>
+                </ul>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title-wrapper">
+                    <button class="action-primary" onclick="openModal('flipbook-modal')">
+                        Ajouter un Flipbook
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="messages" id="messages-container" style="display: none;">
+                <!-- Messages dynamiques -->
+            </div>
+
+            <!-- Data Grid -->
+            <div class="admin__data-grid-wrap">
+                <!-- Toolbar -->
+                <div class="admin__data-grid-toolbar">
+                    <div class="admin__data-grid-toolbar-left">
+                        <select class="admin__control-select" id="mass-action-select">
+                            <option value="">Actions</option>
+                            <option value="enable">Activer</option>
+                            <option value="disable">Désactiver</option>
+                            <option value="delete">Supprimer</option>
+                        </select>
+                        <button class="action-secondary" onclick="applyMassAction()">Appliquer</button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="admin__data-grid-header">
+                    <div class="admin__data-grid-filters">
+                        <input type="text" class="admin__control-text" placeholder="Rechercher par titre..." id="search-input">
+                        <select class="admin__control-select" id="status-filter">
+                            <option value="">Tous les statuts</option>
+                            <option value="enabled">Activé</option>
+                            <option value="disabled">Désactivé</option>
+                            <option value="draft">Brouillon</option>
+                        </select>
+                        <select class="admin__control-select" id="category-filter">
+                            <option value="">Toutes les catégories</option>
+                            <option value="catalogue">Catalogue</option>
+                            <option value="brochure">Brochure</option>
+                            <option value="magazine">Magazine</option>
+                            <option value="rapport">Rapport</option>
+                        </select>
+                    </div>
+                    <button class="action-secondary" onclick="resetFilters()">Réinitialiser</button>
+                </div>
+
+                <!-- Table -->
+                <table class="data-grid" id="flipbooks-grid">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="select-all"></th>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Catégorie</th>
+                            <th>Statut</th>
+                            <th>Vues</th>
+                            <th>Taille</th>
+                            <th>Date de création</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="flipbooks-tbody">
+                        <!-- Contenu généré dynamiquement -->
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <div class="admin__data-grid-pager">
+                    <div class="admin__data-grid-pager-wrap">
+                        <span>Affichage de <span id="items-from">1</span> à <span id="items-to">10</span> sur <span id="items-total">25</span> éléments</span>
+                    </div>
+                    <div class="admin__data-grid-pager-wrap">
+                        <button class="action-secondary" id="prev-page" onclick="changePage(-1)">Précédent</button>
+                        <span id="current-page">1</span> / <span id="total-pages">3</span>
+                        <button class="action-secondary" id="next-page" onclick="changePage(1)">Suivant</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-popup" id="flipbook-modal">
+        <div class="modal-inner-wrap">
+            <header class="modal-header">
+                <h2 class="modal-title" id="modal-title">Nouveau Flipbook</h2>
+                <button class="action-close" onclick="closeModal('flipbook-modal')">×</button>
+            </header>
+            <div class="modal-content">
+                <form id="flipbook-form">
+                    <fieldset class="admin__fieldset">
+                        <legend class="admin__legend">Informations générales</legend>
+                        
+                        <div class="admin__field admin__field-required">
+                            <label class="admin__field-label" for="flipbook-title">
+                                <span>Titre</span>
+                            </label>
+                            <div class="admin__field-control">
+                                <input type="text" class="admin__control-text" id="flipbook-title" name="title" required>
+                            </div>
+                        </div>
+
+                        <div class="admin__field">
+                            <label class="admin__field-label" for="flipbook-description">
+                                <span>Description</span>
+                            </label>
+                            <div class="admin__field-control">
+                                <textarea class="admin__control-textarea" id="flipbook-description" name="description" rows="4"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="admin__field">
+                            <label class="admin__field-label" for="flipbook-category">
+                                <span>Catégorie</span>
+                            </label>
+                            <div class="admin__field-control">
+                                <select class="admin__control-select" id="flipbook-category" name="category">
+                                    <option value="">Sélectionner une catégorie</option>
+                                    <option value="catalogue">Catalogue</option>
+                                    <option value="brochure">Brochure</option>
+                                    <option value="magazine">Magazine</option>
+                                    <option value="rapport">Rapport</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="admin__field">
+                            <label class="admin__field-label" for="flipbook-status">
+                                <span>Statut</span>
+                            </label>
+                            <div class="admin__field-control">
+                                <select class="admin__control-select" id="flipbook-status" name="status">
+                                    <option value="enabled">Activé</option>
+                                    <option value="disabled">Désactivé</option>
+                                    <option value="draft">Brouillon</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="admin__fieldset">
+                        <legend class="admin__legend">Fichier PDF</legend>
+                        
+                        <div class="admin__field admin__field-required">
+                            <label class="admin__field-label">
+                                <span>Fichier PDF</span>
+                            </label>
+                            <div class="admin__field-control">
+                                <div class="admin__field-file" id="file-upload-area">
+                                    <div class="file-uploader-area">
+                                        <button type="button" class="file-uploader-button" onclick="document.getElementById('pdf-file').click()">
+                                            Choisir un fichier
+                                        </button>
+                                        <p>ou glissez-déposez votre fichier PDF ici</p>
+                                        <p style="font-size: 1.2rem; color: #999; margin-top: 1rem;">Taille maximale : 50 MB</p>
+                                    </div>
+                                    <input type="file" id="pdf-file" accept=".pdf" style="display: none;">
+                                </div>
+                                <div id="file-info" style="margin-top: 1rem; display: none;"></div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div style="text-align: right; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #ccc;">
+                        <button type="button" class="action-secondary" onclick="closeModal('flipbook-modal')" style="margin-right: 1rem;">
+                            Annuler
+                        </button>
+                        <button type="submit" class="action-primary">
+                            <span id="submit-text">Enregistrer</span>
+                            <span id="submit-spinner" class="spinner" style="display: none; margin-left: 1rem;"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données d'exemple
+        let flipbooks = [
+            {
+                id: 1,
+                title: "Catalogue Printemps 2024",
+                description: "Notre nouvelle collection printemps avec toutes les nouveautés",
+                category: "catalogue",
+                status: "enabled",
+                views: 1247,
+                fileSize: "12.5 MB",
+                createdAt: "2024-01-15"
+            },
+            {
+                id: 2,
+                title: "Brochure Services Premium",
+                description: "Présentation complète de nos services premium",
+                category: "brochure",
+                status: "enabled",
+                views: 856,
+                fileSize: "8.2 MB",
+                createdAt: "2024-01-10"
+            },
+            {
+                id: 3,
+                title: "Rapport Annuel 2023",
+                description: "Bilan complet de l'année 2023 avec analyses détaillées",
+                category: "rapport",
+                status: "draft",
+                views: 234,
+                fileSize: "15.7 MB",
+                createdAt: "2024-01-05"
+            },
+            {
+                id: 4,
+                title: "Magazine Client Q1 2024",
+                description: "Magazine trimestriel pour nos clients fidèles",
+                category: "magazine",
+                status: "disabled",
+                views: 510,
+                fileSize: "22.1 MB",
+                createdAt: "2023-12-20"
+            },
+            {
+                id: 5,
+                title: "Guide d'utilisation produits",
+                description: "Guide complet d'utilisation de nos produits phares",
+                category: "brochure",
+                status: "enabled",
+                views: 1089,
+                fileSize: "18.3 MB",
+                createdAt: "2023-12-15"
+            }
+        ];
+
+        let currentEditId = null;
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let filteredFlipbooks = [...flipbooks];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFlipbooks();
+            setupEventListeners();
+            updatePagination();
+        });
+
+        function setupEventListeners() {
+            // Recherche
+            document.getElementById('search-input').addEventListener('input', debounce(filterFlipbooks, 300));
+            
+            // Filtres
+            document.getElementById('status-filter').addEventListener('change', filterFlipbooks);
+            document.getElementById('category-filter').addEventListener('change', filterFlipbooks);
+
+            // Select all
+            document.getElementById('select-all').addEventListener('change', function(e) {
+                const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = e.target.checked);
+            });
+
+            // File upload
+            setupFileUpload();
+
+            // Form
+            document.getElementById('flipbook-form').addEventListener('submit', handleFormSubmit);
+        }
+
+        function setupFileUpload() {
+            const fileArea = document.getElementById('file-upload-area');
+            const fileInput = document.getElementById('pdf-file');
+
+            fileArea.addEventListener('dragover', handleDragOver);
+            fileArea.addEventListener('drop', handleDrop);
+            fileInput.addEventListener('change', handleFileSelect);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            if (file.type !== 'application/pdf') {
+                showMessage('Veuillez sélectionner un fichier PDF', 'error');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) {
+                showMessage('Le fichier est trop volumineux (maximum 50 MB)', 'error');
+                return;
+            }
+
+            const fileInfo = document.getElementById('file-info');
+            fileInfo.innerHTML = `
+                <div style="padding: 1rem; background: #d4edda; border: 1px solid #c3e6cb; color: #155724;">
+                    <strong>✓ ${file.name}</strong> (${(file.size / 1024 / 1024).toFixed(2)} MB)
+                </div>
+            `;
+            fileInfo.style.display = 'block';
+        }
+
+        function filterFlipbooks() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+
+            filteredFlipbooks = flipbooks.filter(flipbook => {
+                const matchesSearch = flipbook.title.toLowerCase().includes(searchTerm) ||
+                                    flipbook.description.toLowerCase().includes(searchTerm);
+                const matchesStatus = !statusFilter || flipbook.status === statusFilter;
+                const matchesCategory = !categoryFilter || flipbook.category === categoryFilter;
+
+                return matchesSearch && matchesStatus && matchesCategory;
+            });
+
+            currentPage = 1;
+            renderFlipbooks();
+            updatePagination();
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('status-filter').value = '';
+            document.getElementById('category-filter').value = '';
+            filterFlipbooks();
+        }
+
+        function renderFlipbooks() {
+            const tbody = document.getElementById('flipbooks-tbody');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageFlipbooks = filteredFlipbooks.slice(startIndex, endIndex);
+
+            if (pageFlipbooks.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 3rem; color: #666;">
+                            Aucun flipbook trouvé
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = pageFlipbooks.map(flipbook => `
+                <tr>
+                    <td><input type="checkbox" value="${flipbook.id}"></td>
+                    <td>${flipbook.id}</td>
+                    <td><strong>${flipbook.title}</strong></td>
+                    <td>${getCategoryLabel(flipbook.category)}</td>
+                    <td><span class="grid-status status-${flipbook.status}">${getStatusLabel(flipbook.status)}</span></td>
+                    <td>${flipbook.views.toLocaleString()}</td>
+                    <td>${flipbook.fileSize}</td>
+                    <td>${formatDate(flipbook.createdAt)}</td>
+                    <td>
+                        <a href="#" class="action-menu-item" onclick="previewFlipbook(${flipbook.id})">Aperçu</a>
+                        <a href="#" class="action-menu-item" onclick="editFlipbook(${flipbook.id})">Modifier</a>
+                        <a href="#" class="action-menu-item" onclick="deleteFlipbook(${flipbook.id})" style="color: #eb5202;">Supprimer</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updatePagination() {
+            const totalItems = filteredFlipbooks.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+            document.getElementById('items-from').textContent = totalItems > 0 ? startItem : 0;
+            document.getElementById('items-to').textContent = endItem;
+            document.getElementById('items-total').textContent = totalItems;
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages;
+
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredFlipbooks.length / itemsPerPage);
+            const newPage = currentPage + direction;
+
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderFlipbooks();
+                updatePagination();
+            }
+        }
+
+        function getCategoryLabel(category) {
+            const labels = {
+                'catalogue': 'Catalogue',
+                'brochure': 'Brochure',
+                'magazine': 'Magazine',
+                'rapport': 'Rapport'
+            };
+            return labels[category] || category;
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'enabled': 'Activé',
+                'disabled': 'Désactivé',
+                'draft': 'Brouillon'
+            };
+            return labels[status] || status;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+
+        function resetForm() {
+            document.getElementById('flipbook-form').reset();
+            document.getElementById('file-info').style.display = 'none';
+            document.getElementById('modal-title').textContent = 'Nouveau Flipbook';
+            currentEditId = null;
+        }
+
+        function editFlipbook(id) {
+            const flipbook = flipbooks.find(f => f.id === id);
+            if (!flipbook) return;
+
+            currentEditId = id;
+            document.getElementById('modal-title').textContent = 'Modifier le Flipbook';
+            document.getElementById('flipbook-title').value = flipbook.title;
+            document.getElementById('flipbook-description').value = flipbook.description;
+            document.getElementById('flipbook-category').value = flipbook.category;
+            document.getElementById('flipbook-status').value = flipbook.status;
+
+            openModal('flipbook-modal');
+        }
+
+        function deleteFlipbook(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce flipbook ?')) {
+                flipbooks = flipbooks.filter(f => f.id !== id);
+                filterFlipbooks();
+                showMessage('Flipbook supprimé avec succès', 'success');
+            }
+        }
+
+        function previewFlipbook(id) {
+            const flipbook = flipbooks.find(f => f.id === id);
+            if (flipbook) {
+                showMessage(`Ouverture de l'aperçu pour "${flipbook.title}"`, 'success');
+            }
+        }
+
+        function applyMassAction() {
+            const action = document.getElementById('mass-action-select').value;
+            const selectedIds = Array.from(document.querySelectorAll('tbody input[type="checkbox"]:checked'))
+                                   .map(cb => parseInt(cb.value));
+
+            if (!action || selectedIds.length === 0) {
+                showMessage('Veuillez sélectionner une action et au moins un élément', 'error');
+                return;
+            }
+
+            if (action === 'delete' && !confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} flipbook(s) ?`)) {
+                return;
+            }
+
+            selectedIds.forEach(id => {
+                const flipbook = flipbooks.find(f => f.id === id);
+                if (flipbook) {
+                    switch (action) {
+                        case 'enable':
+                            flipbook.status = 'enabled';
+                            break;
+                        case 'disable':
+                            flipbook.status = 'disabled';
+                            break;
+                        case 'delete':
+                            flipbooks = flipbooks.filter(f => f.id !== id);
+                            break;
+                    }
+                }
+            });
+
+            filterFlipbooks();
+            document.getElementById('select-all').checked = false;
+            showMessage(`Action "${action}" appliquée à ${selectedIds.length} élément(s)`, 'success');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const submitText = document.getElementById('submit-text');
+            const submitSpinner = document.getElementById('submit-spinner');
+            
+            // Loading state
+            submitButton.disabled = true;
+            submitText.style.display = 'none';
+            submitSpinner.style.display = 'inline-block';
+
+            const formData = new FormData(e.target);
+            const title = formData.get('title');
+            const description = formData.get('description');
+            const category = formData.get('category');
+            const status = formData.get('status');
+            const file = document.getElementById('pdf-file').files[0];
+
+            // Simulation d'une requête async
+            setTimeout(() => {
+                if (currentEditId) {
+                    // Modification
+                    const flipbook = flipbooks.find(f => f.id === currentEditId);
+                    if (flipbook) {
+                        flipbook.title = title;
+                        flipbook.description = description;
+                        flipbook.category = category;
+                        flipbook.status = status;
+                        showMessage('Flipbook modifié avec succès', 'success');
+                    }
+                } else {
+                    // Création
+                    const newFlipbook = {
+                        id: Math.max(...flipbooks.map(f => f.id)) + 1,
+                        title,
+                        description,
+                        category,
+                        status,
+                        views: 0,
+                        fileSize: file ? (file.size / 1024 / 1024).toFixed(1) + ' MB' : '0 MB',
+                        createdAt: new Date().toISOString().split('T')[0]
+                    };
+                    flipbooks.unshift(newFlipbook);
+                    showMessage('Flipbook créé avec succès', 'success');
+                }
+
+                filterFlipbooks();
+                closeModal('flipbook-modal');
+
+                // Reset loading state
+                submitButton.disabled = false;
+                submitText.style.display = 'inline';
+                submitSpinner.style.display = 'none';
+            }, 1500);
+        }
+
+        function showMessage(text, type) {
+            const container = document.getElementById('messages-container');
+            const messageClass = type === 'error' ? 'message-error' : 'message-success';
+            
+            container.innerHTML = `
+                <div class="message ${messageClass}">
+                    ${text}
+                </div>
+            `;
+            container.style.display = 'block';
+
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 5000);
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Fermer modal en cliquant à l'extérieur
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-popup')) {
+                closeModal(e.target.id);
+            }
+        });
+    </script>
+</body>
+</html>
