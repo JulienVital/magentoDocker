@@ -1,9 +1,35 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="ActivePublishing_Flipbook::Flipbook" title="Flipbook" module="ActivePublishing_Flipbook" sortOrder="51" resource="ActivePublishing_Flipbook::Flipbook"/>
-        <add id="ActivePublishing_Flipbook::manage" title="Manage Flipbook" module="ActivePublishing_Flipbook" sortOrder="10" action="ActivePublishing_Flipbook/manage" resource="ActivePublishing_Flipbook::manage" parent="ActivePublishing_Flipbook::Flipbook"/>
-        <add id="ActivePublishing_Flipbook::Create" title="Create Flipbook" module="ActivePublishing_Flipbook" sortOrder="10" action="ActivePublishing_Flipbook/create" resource="ActivePublishing_Flipbook::create" parent="ActivePublishing_Flipbook::Flipbook"/>
-        <add id="ActivePublishing_Flipbook::config" title="Configuration" module="ActivePublishing_Flipbook" sortOrder="99" parent="ActivePublishing_Flipbook::Flipbook" action="ActivePublishing_Flipbook/config" resource="ActivePublishing_Flipbook::config"/>
+      <add id="ActivePublishing_Flipbook::Flipbook" 
+      title="Flipbook" 
+      module="ActivePublishing_Flipbook" 
+      sortOrder="51" 
+      dependsOnModule="ActivePublishing_Flipbook" 
+      resource="ActivePublishing_Flipbook::Flipbook"/>
+
+      <add id="ActivePublishing_Flipbook::greetings_helloworld" 
+      title="Manage Flipbook"
+       module="ActivePublishing_Flipbook" 
+       parent="ActivePublishing_Flipbook::Flipbook" 
+       dependsOnModule="ActivePublishing_Flipbook" 
+       action="flipbook/helloworld" 
+       resource="ActivePublishing_Flipbook::greetings"/>
+
+             <add id="ActivePublishing_Flipbook::create_flipbook" 
+      title="Create Flipbook"
+       module="ActivePublishing_Flipbook" 
+       parent="ActivePublishing_Flipbook::Flipbook" 
+       dependsOnModule="ActivePublishing_Flipbook" 
+       action="flipbook/helloworld" 
+       resource="ActivePublishing_Flipbook::greetings"/>
+
+             <add id="ActivePublishing_Flipbook::configuration" 
+      title="Configuration"
+       module="ActivePublishing_Flipbook" 
+       parent="ActivePublishing_Flipbook::Flipbook" 
+       dependsOnModule="ActivePublishing_Flipbook" 
+       action="flipbook/helloworld" 
+       resource="ActivePublishing_Flipbook::greetings"/>
     </menu>
 </config>
