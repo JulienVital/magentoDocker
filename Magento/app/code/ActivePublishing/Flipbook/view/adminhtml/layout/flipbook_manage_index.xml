@@ -7,7 +7,7 @@
     </referenceBlock>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\Template" template="ActivePublishing_Flipbook::helloworld.phtml"/>
+            <block class="Magento\Backend\Block\Template" template="ActivePublishing_Flipbook::manage.phtml"/>
         </referenceContainer>
     </body>
 </page>

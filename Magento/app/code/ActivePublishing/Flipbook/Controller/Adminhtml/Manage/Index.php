@@ -1,5 +1,5 @@
 <?php
-namespace ActivePublishing\Flipbook\Controller\Adminhtml\HelloWorld;
+namespace ActivePublishing\Flipbook\Controller\Adminhtml\Manage;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;

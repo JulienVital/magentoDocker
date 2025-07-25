@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un Flipbook - Magento Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.4rem;
+            line-height: 1.36;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        /* Layout Magento */
+        .page-wrapper {
+            padding-left: 0;
+        }
+
+        .page-main {
+            padding: 3rem;
+            max-width: 120rem;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Breadcrumbs Magento */
+        .breadcrumbs {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumbs ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumbs li {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .breadcrumbs li:not(:last-child)::after {
+            content: '>';
+            margin: 0 1rem;
+            color: #ccc;
+        }
+
+        .breadcrumbs a {
+            color: #006bb4;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        /* Boutons Magento */
+        .action-primary {
+            background: #eb5202;
+            border: 1px solid #eb5202;
+            color: #fff;
+            padding: 1rem 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-primary:hover {
+            background: #ba4000;
+            border-color: #ba4000;
+        }
+
+        .action-primary:disabled {
+            background: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .action-secondary {
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 1rem 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-secondary:hover {
+            border-color: #999;
+            background: #f5f5f5;
+        }
+
+        /* Messages Magento */
+        .messages {
+            margin-bottom: 2rem;
+        }
+
+        .message {
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .message-success {
+            border-left-color: #79a22e;
+            background: #f0f8e4;
+            color: #3d4a00;
+        }
+
+        .message-error {
+            border-left-color: #e22626;
+            background: #fdf2f2;
+            color: #333;
+        }
+
+        .message-warning {
+            border-left-color: #ffb84d;
+            background: #fff8e6;
+            color: #663d00;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .form-header {
+            background: #f5f5f5;
+            padding: 2rem 3rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: #333;
+            margin: 0;
+        }
+
+        .form-content {
+            padding: 3rem;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 4rem;
+            padding: 0 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            max-width: 20rem;
+        }
+
+
+        .step.completed:not(:last-child)::after {
+            background: #79a22e;
+        }
+
+        .step-circle {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: #e5e5e5;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.6rem;
+            position: relative;
+            z-index: 2;
+            margin-right: 1rem;
+        }
+
+        .step.active .step-circle {
+            background: #eb5202;
+            color: #fff;
+        }
+
+        .step.completed .step-circle {
+            background: #79a22e;
+            color: #fff;
+        }
+
+        .step-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #eb5202;
+        }
+
+        .step.completed .step-label {
+            color: #79a22e;
+        }
+
+        /* Formulaires Magento */
+        .admin__fieldset {
+            margin-bottom: 3rem;
+        }
+
+        .admin__legend {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin__field {
+            margin-bottom: 2.5rem;
+        }
+
+        .admin__field-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .admin__field-label.required::after {
+            content: ' *';
+            color: #e22626;
+        }
+
+        .admin__field-control {
+            position: relative;
+        }
+
+        .admin__control-text,
+        .admin__control-textarea,
+        .admin__control-select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 1px solid #ccc;
+            font-size: 1.4rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .admin__control-text:focus,
+        .admin__control-textarea:focus,
+        .admin__control-select:focus {
+            outline: none;
+            border-color: #006bb4;
+            box-shadow: 0 0 0 1px #006bb4;
+        }
+
+        .admin__control-textarea {
+            resize: vertical;
+            min-height: 10rem;
+        }
+
+        .admin__control-select {
+            background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") no-repeat right 1rem center/1.5em 1.5em;
+            appearance: none;
+            padding-right: 4rem;
+        }
+
+        /* File Upload Zone */
+        .file-upload-zone {
+            border: 3px dashed #ccc;
+            border-radius: 8px;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-upload-zone:hover {
+            border-color: #006bb4;
+            background: #f0f8ff;
+        }
+
+        .file-upload-zone.dragover {
+            border-color: #eb5202;
+            background: #fff5f0;
+            transform: scale(1.02);
+        }
+
+        .file-upload-zone.has-file {
+            border-color: #79a22e;
+            background: #f0f8e4;
+        }
+
+        .upload-icon {
+            font-size: 6rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .file-upload-zone:hover .upload-icon {
+            color: #006bb4;
+        }
+
+        .file-upload-zone.dragover .upload-icon {
+            color: #eb5202;
+        }
+
+        .file-upload-zone.has-file .upload-icon {
+            color: #79a22e;
+        }
+
+        .upload-text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .upload-subtext {
+            font-size: 1.4rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .upload-button {
+            background: #006bb4;
+            color: #fff;
+            padding: 1.2rem 2.4rem;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background: #005a9e;
+        }
+
+        .file-requirements {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f0f8ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 4px;
+        }
+
+        .file-requirements h4 {
+            color: #006bb4;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .file-requirements ul {
+            list-style: none;
+            color: #666;
+        }
+
+        .file-requirements li {
+            margin-bottom: 0.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .file-requirements li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #79a22e;
+            font-weight: bold;
+        }
+
+        /* File Info Display */
+        .file-info {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f0f8e4;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-icon {
+            font-size: 4rem;
+            color: #79a22e;
+        }
+
+        .file-meta h4 {
+            color: #155724;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-meta p {
+            color: #666;
+            font-size: 1.3rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .file-action {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #333;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-action:hover {
+            background: #f5f5f5;
+        }
+
+        .file-action.danger {
+            color: #e22626;
+            border-color: #e22626;
+        }
+
+        .file-action.danger:hover {
+            background: #e22626;
+            color: #fff;
+        }
+
+        /* Progress Bar */
+        .upload-progress {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.8rem;
+            background: #e5e5e5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #006bb4, #eb5202);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.3rem;
+            color: #666;
+        }
+
+        /* Configuration Options */
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .config-section {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .config-section h3 {
+            font-size: 1.6rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin__field-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin__control-checkbox {
+            width: 1.8rem;
+            height: 1.8rem;
+            cursor: pointer;
+        }
+
+        .admin__field-option label {
+            cursor: pointer;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            background: #f5f5f5;
+            padding: 2rem 3rem;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-actions-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #eb5202;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-main {
+                padding: 1.5rem;
+            }
+
+            .form-content {
+                padding: 2rem;
+            }
+
+            .config-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 2rem;
+                align-items: stretch;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="page-main">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="#">Tableau de bord</a></li>
+                    <li><a href="#">Contenu</a></li>
+                    <li><a href="#">Flipbooks</a></li>
+                    <li>Créer un Flipbook</li>
+                </ul>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title-wrapper">
+                    <h1 class="page-title">Créer un nouveau Flipbook</h1>
+                </div>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active" id="step-1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Informations</div>
+                </div>
+                <div class="step" id="step-2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Fichier PDF</div>
+                </div>
+                <div class="step" id="step-3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Configuration</div>
+                </div>
+                <div class="step" id="step-4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Finalisation</div>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="messages" id="messages-container" style="display: none;">
+                <!-- Messages dynamiques -->
+            </div>
+
+            <!-- Form -->
+            <form id="flipbook-form" enctype="multipart/form-data">
+                <!-- Step 1: Informations générales -->
+                <div class="form-container fade-in" id="form-step-1">
+                    <div class="form-header">
+                        <h2>📋 Informations générales</h2>
+                    </div>
+                    <div class="form-content">
+                        <fieldset class="admin__fieldset">
+                            <legend class="admin__legend">
+                                📝 Détails du Flipbook
+                            </legend>
+                            
+                            <div class="admin__field admin__field-required">
+                                <label class="admin__field-label required" for="flipbook-title">
+                                    Titre du Flipbook
+                                </label>
+                                <div class="admin__field-control">
+                                    <input type="text" class="admin__control-text" id="flipbook-title" name="title" required placeholder="Ex: Catalogue Printemps 2024">
+                                </div>
+                            </div>
+
+                            <div class="admin__field">
+                                <label class="admin__field-label" for="flipbook-description">
+                                    Description
+                                </label>
+                                <div class="admin__field-control">
+                                    <textarea class="admin__control-textarea" id="flipbook-description" name="description" rows="4" placeholder="Décrivez brièvement le contenu de votre flipbook..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="config-grid">
+                                <div class="admin__field">
+                                    <label class="admin__field-label" for="flipbook-category">
+                                        Catégorie
+                                    </label>
+                                    <div class="admin__field-control">
+                                        <select class="admin__control-select" id="flipbook-category" name="category">
+                                            <option value="">Sélectionner une catégorie</option>
+                                            <option value="catalogue">📚 Catalogue</option>
+                                            <option value="brochure">📄 Brochure</option>
+                                            <option value="magazine">📰 Magazine</option>
+                                            <option value="rapport">📊 Rapport</option>
+                                            <option value="guide">📖 Guide</option>
+                                            <option value="autre">🔖 Autre</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="admin__field">
+                                    <label class="admin__field-label" for="flipbook-status">
+                                        Statut de publication
+                                    </label>
+                                    <div class="admin__field-control">
+                                        <select class="admin__control-select" id="flipbook-status" name="status">
+                                            <option value="draft">🔒 Brouillon</option>
+                                            <option value="enabled">✅ Publié</option>
+                                            <option value="disabled">❌ Désactivé</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <!-- Step 2: Upload PDF -->
+                <div class="form-container" id="form-step-2" style="display: none;">
+                    <div class="form-header">
+                        <h2>📄 Fichier PDF</h2>
+                    </div>
+                    <div class="form-content">
+                        <fieldset class="admin__fieldset">
+                            <legend class="admin__legend">
+                                📤 Upload de votre document
+                            </legend>
+                            
+                            <div class="admin__field admin__field-required">
+                                <label class="admin__field-label required">
+                                    Sélectionner votre fichier PDF
+                                </label>
+                                <div class="admin__field-control">
+                                    <div class="file-upload-zone" id="file-upload-zone">
+                                        <div class="upload-icon">📄</div>
+                                        <div class="upload-text">Glissez-déposez votre fichier PDF ici</div>
+                                        <div class="upload-subtext">ou</div>
+                                        <button type="button" class="upload-button" onclick="document.getElementById('pdf-file').click()">
+                                            Parcourir les fichiers
+                                        </button>
+                                        <input type="file" id="pdf-file" name="pdf_file" accept=".pdf" style="display: none;">
+                                    </div>
+
+                                    <div class="file-info" id="file-info">
+                                        <div class="file-details">
+                                            <div class="file-icon">📄</div>
+                                            <div class="file-meta">
+                                                <h4 id="file-name">Document.pdf</h4>
+                                                <p id="file-size">0 MB</p>
+                                            </div>
+                                        </div>
+                                        <div class="file-actions">
+                                            <button type="button" class="file-action" onclick="previewFile()">👁️ Aperçu</button>
+                                            <button type="button" class="file-action danger" onclick="removeFile()">🗑️ Supprimer</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="upload-progress" id="upload-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" id="progress-fill"></div>
+                                        </div>
+                                        <div class="progress-text" id="progress-text">Upload en cours... 0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-requirements">
+                                <h4>📋 Exigences du fichier</h4>
+                                <ul>
+                                    <li>Format accepté : PDF uniquement</li>
+                                    <li>Taille maximale : 100 MB</li>
+                                    <li>Résolution recommandée : 300 DPI</li>
+                                    <li>Orientation : Portrait ou Paysage</li>
+                                    <li>Pages : Maximum 992 pages</li>
+                                </ul>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <!-- Step 3: Configuration -->
+                <div class="form-container" id="form-step-3" style="display: none;">
+                    <div class="form-header">
+                        <h2>⚙️ Configuration</h2>
+                    </div>
+                    <div class="form-content">
+                        <fieldset class="admin__fieldset">
+                            <legend class="admin__legend">
+                                🎛️ Options d'affichage et de comportement
+                            </legend>
+                            
+                            <div class="config-grid">
+                                <div class="config-section">
+                                    <h3>👁️ Affichage</h3>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="auto-flip" name="auto_flip" checked>
+                                        <label for="auto-flip">Défilement automatique</label>
+                                    </div>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="show-toolbar" name="show_toolbar" checked>
+                                        <label for="show-toolbar">Afficher la barre d'outils</label>
+                                    </div>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="show-thumbnails" name="show_thumbnails" checked>
+                                        <label for="show-thumbnails">Afficher les miniatures</label>
+                                    </div>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="fullscreen-mode" name="fullscreen_mode" checked>
+                                        <label for="fullscreen-mode">Mode plein écran</label>
+                                    </div>
+                                </div>
+
+                                <div class="config-section">
+                                    <h3>🔧 Fonctionnalités</h3>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="enable-download" name="enable_download">
+                                        <label for="enable-download">Autoriser le téléchargement</label>
+                                    </div>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="enable-print" name="enable_print">
+                                        <label for="enable-print">Autoriser l'impression</label>
+                                    </div>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="enable-sharing" name="enable_sharing" checked>
+                                        <label for="enable-sharing">Autoriser le partage</label>
+                                    </div>
+                                    <div class="admin__field-option">
+                                        <input type="checkbox" class="admin__control-checkbox" id="enable-search" name="enable_search" checked>
+                                        <label for="enable-search">Recherche dans le document</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="admin__field">
+                                <label class="admin__field-label" for="flipbook-theme">
+                                    Thème d'affichage
+                                </label>
+                                <div class="admin__field-control">
+                                    <select class="admin__control-select" id="flipbook-theme" name="theme">
+                                        <option value="default">🎨 Thème par défaut</option>
+                                        <option value="dark">🌙 Thème sombre</option>
+                                        <option value="light">☀️ Thème clair</option>
+                                        <option value="modern">✨ Thème moderne</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <!-- Step 4: Finalisation -->
+                <div class="form-container" id="form-step-4" style="display: none;">
+                    <div class="form-header">
+                        <h2>✅ Finalisation</h2>
+                    </div>
+                    <div class="form-content">
+                        <fieldset class="admin__fieldset">
+                            <legend class="admin__legend">
+                                📋 Récapitulatif et validation
+                            </legend>
+                            
+                            <div id="summary-content">
+                                <!-- Contenu généré dynamiquement -->
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <div class="form-actions-left">
+                        <button type="button" class="action-secondary" id="prev-step" onclick="previousStep()" style="display: none;">
+                            ← Étape précédente
+                        </button>
+                    </div>
+                    <div class="form-actions-right">
+                        <button type="button" class="action-secondary" onclick="window.history.back()">
+                            Annuler
+                        </button>
+                        <button type="button" class="action-primary" id="next-step" onclick="nextStep()">
+                            Étape suivante →
+                        </button>
+                        <button type="submit" class="action-primary" id="submit-btn" style="display: none;">
+                            <span id="submit-text">💾 Créer le Flipbook</span>
+                            <span id="submit-spinner" class="spinner" style="display: none;"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let totalSteps = 4;
+        let uploadedFile = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFileUpload();
+            setupFormValidation();
+        });
+
+        function setupFileUpload() {
+            const fileZone = document.getElementById('file-upload-zone');
+            const fileInput = document.getElementById('pdf-file');
+
+            // Drag & Drop
+            fileZone.addEventListener('dragover', handleDragOver);
+            fileZone.addEventListener('dragleave', handleDragLeave);
+            fileZone.addEventListener('drop', handleDrop);
+
+            // File input change
+            fileInput.addEventListener('change', handleFileSelect);
+        }
+
+        function setupFormValidation() {
+            const form = document.getElementById('flipbook-form');
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            // Validation du fichier
+            if (file.type !== 'application/pdf') {
+                showMessage('❌ Veuillez sélectionner un fichier PDF', 'error');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) { // 50MB
+                showMessage('❌ Le fichier est trop volumineux (maximum 50 MB)', 'error');
+                return;
+            }
+
+            uploadedFile = file;
+            displayFileInfo(file);
+            simulateUpload();
+        }
+
+        function displayFileInfo(file) {
+            const fileZone = document.getElementById('file-upload-zone');
+            const fileInfo = document.getElementById('file-info');
+            
+            fileZone.classList.add('has-file');
+            fileInfo.classList.add('show');
+            
+            document.getElementById('file-name').textContent = file.name;
+            document.getElementById('file-size').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            
+            showMessage('✅ Fichier sélectionné avec succès', 'success');
+        }
+
+        function simulateUpload() {
+            const progressContainer = document.getElementById('upload-progress');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            progressContainer.style.display = 'block';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `Upload en cours... ${Math.round(progress)}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        showMessage('✅ Fichier uploadé avec succès', 'success');
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        function removeFile() {
+            uploadedFile = null;
+            const fileZone = document.getElementById('file-upload-zone');
+            const fileInfo = document.getElementById('file-info');
+            const fileInput = document.getElementById('pdf-file');
+            
+            fileZone.classList.remove('has-file');
+            fileInfo.classList.remove('show');
+            fileInput.value = '';
+            
+            showMessage('🗑️ Fichier supprimé', 'warning');
+        }
+
+        function previewFile() {
+            if (uploadedFile) {
+                showMessage('👁️ Ouverture de l\'aperçu...', 'success');
+                // Ici vous pouvez intégrer votre logique de prévisualisation
+            }
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStepDisplay();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        function validateCurrentStep() {
+            switch (currentStep) {
+                case 1:
+                    const title = document.getElementById('flipbook-title').value.trim();
+                    if (!title) {
+                        showMessage('❌ Le titre est requis', 'error');
+                        document.getElementById('flipbook-title').focus();
+                        return false;
+                    }
+                    break;
+                    
+                case 2:
+                    if (!uploadedFile) {
+                        showMessage('❌ Veuillez sélectionner un fichier PDF', 'error');
+                        return false;
+                    }
+                    break;
+                    
+                case 3:
+                    // Validation des options si nécessaire
+                    break;
+            }
+            return true;
+        }
+
+        function updateStepDisplay() {
+            // Mettre à jour les étapes visuelles
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById(`step-${i}`);
+                const formStep = document.getElementById(`form-step-${i}`);
+                
+                step.classList.remove('active', 'completed');
+                formStep.style.display = 'none';
+                
+                if (i < currentStep) {
+                    step.classList.add('completed');
+                } else if (i === currentStep) {
+                    step.classList.add('active');
+                    formStep.style.display = 'block';
+                    formStep.classList.add('fade-in');
+                }
+            }
+            
+            // Mettre à jour les boutons
+            const prevBtn = document.getElementById('prev-step');
+            const nextBtn = document.getElementById('next-step');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            prevBtn.style.display = currentStep > 1 ? 'inline-flex' : 'none';
+            
+            if (currentStep === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'inline-flex';
+                generateSummary();
+            } else {
+                nextBtn.style.display = 'inline-flex';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function generateSummary() {
+            const title = document.getElementById('flipbook-title').value;
+            const description = document.getElementById('flipbook-description').value;
+            const category = document.getElementById('flipbook-category').value;
+            const status = document.getElementById('flipbook-status').value;
+            
+            const summaryContent = document.getElementById('summary-content');
+            summaryContent.innerHTML = `
+                <div style="background: #f9f9f9; padding: 2rem; border-radius: 4px; border: 1px solid #e5e5e5;">
+                    <h3 style="margin-bottom: 2rem; color: #333;">📋 Récapitulatif de votre Flipbook</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div>
+                            <strong>Titre :</strong><br>
+                            <span style="color: #666;">${title || 'Non défini'}</span>
+                        </div>
+                        <div>
+                            <strong>Catégorie :</strong><br>
+                            <span style="color: #666;">${getCategoryLabel(category)}</span>
+                        </div>
+                        <div>
+                            <strong>Statut :</strong><br>
+                            <span style="color: #666;">${getStatusLabel(status)}</span>
+                        </div>
+                        <div>
+                            <strong>Fichier :</strong><br>
+                            <span style="color: #666;">${uploadedFile ? uploadedFile.name : 'Aucun fichier'}</span>
+                        </div>
+                    </div>
+                    
+                    ${description ? `
+                        <div style="margin-bottom: 2rem;">
+                            <strong>Description :</strong><br>
+                            <span style="color: #666;">${description}</span>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="background: #f0f8e4; padding: 1.5rem; border-radius: 4px; border: 1px solid #c3e6cb;">
+                        <strong style="color: #155724;">✅ Votre flipbook est prêt à être créé !</strong>
+                        <p style="margin-top: 0.5rem; color: #666; font-size: 1.3rem;">
+                            Cliquez sur "Créer le Flipbook" pour finaliser la création.
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitSpinner = document.getElementById('submit-spinner');
+            
+            // État de chargement
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
+            submitSpinner.style.display = 'inline-block';
+            
+            // Simulation de la création
+            setTimeout(() => {
+                showMessage('🎉 Flipbook créé avec succès !', 'success');
+                
+                // Redirection après 2 secondes
+                setTimeout(() => {
+                    window.location.href = 'flipbook-management.html';
+                }, 2000);
+            }, 2000);
+        }
+
+        function getCategoryLabel(category) {
+            const labels = {
+                'catalogue': '📚 Catalogue',
+                'brochure': '📄 Brochure',
+                'magazine': '📰 Magazine',
+                'rapport': '📊 Rapport',
+                'guide': '📖 Guide',
+                'autre': '🔖 Autre'
+            };
+            return labels[category] || 'Non définie';
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'draft': '🔒 Brouillon',
+                'enabled': '✅ Publié',
+                'disabled': '❌ Désactivé'
+            };
+            return labels[status] || status;
+        }
+
+        function showMessage(text, type) {
+            const container = document.getElementById('messages-container');
+            const messageClass = type === 'error' ? 'message-error' : 
+                                type === 'warning' ? 'message-warning' : 'message-success';
+            
+            const icon = type === 'error' ? '❌' : 
+                        type === 'warning' ? '⚠️' : '✅';
+            
+            container.innerHTML = `
+                <div class="message ${messageClass} slide-up">
+                    <span>${icon}</span>
+                    <span>${text}</span>
+                </div>
+            `;
+            container.style.display = 'block';
+
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

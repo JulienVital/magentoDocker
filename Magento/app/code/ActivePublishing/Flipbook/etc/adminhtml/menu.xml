@@ -13,7 +13,7 @@
        module="ActivePublishing_Flipbook" 
        parent="ActivePublishing_Flipbook::Flipbook" 
        dependsOnModule="ActivePublishing_Flipbook" 
-       action="flipbook/helloworld" 
+       action="flipbook/manage" 
        resource="ActivePublishing_Flipbook::manage_flipbook"
        />
 
@@ -22,8 +22,8 @@
        module="ActivePublishing_Flipbook" 
        parent="ActivePublishing_Flipbook::Flipbook" 
        dependsOnModule="ActivePublishing_Flipbook" 
-       action="flipbook/helloworld" 
-       resource="ActivePublishing_Flipbook::greetings"/>
+       action="flipbook/create" 
+       resource="ActivePublishing_Flipbook::create_flipbook"/>
 
       <add id="ActivePublishing_Flipbook::configuration" 
       title="Configuration"
