@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Flipbook - Magento Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.4rem;
+            line-height: 1.36;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        /* Layout Magento */
+        .page-wrapper {
+            padding-left: 0;
+        }
+
+        .page-main {
+            padding: 3rem;
+            max-width: 140rem;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Breadcrumbs Magento */
+        .breadcrumbs {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumbs ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumbs li {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .breadcrumbs li:not(:last-child)::after {
+            content: '>';
+            margin: 0 1rem;
+            color: #ccc;
+        }
+
+        .breadcrumbs a {
+            color: #006bb4;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        /* Configuration Layout */
+        .config-layout {
+            display: grid;
+            grid-template-columns: 25rem 1fr;
+            gap: 3rem;
+        }
+
+        /* Navigation Sidebar */
+        .config-nav {
+            background: #fff;
+            border: 1px solid #ccc;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .config-nav-header {
+            background: #f5f5f5;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #ccc;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .config-nav-list {
+            list-style: none;
+        }
+
+        .config-nav-item {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .config-nav-item:last-child {
+            border-bottom: none;
+        }
+
+        .config-nav-link {
+            display: block;
+            padding: 1.5rem 2rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .config-nav-link:hover {
+            background: #f9f9f9;
+            color: #006bb4;
+        }
+
+        .config-nav-link.active {
+            background: #006bb4;
+            color: #fff;
+            border-left: 3px solid #eb5202;
+        }
+
+        /* Configuration Content */
+        .config-content {
+            background: #fff;
+            border: 1px solid #ccc;
+        }
+
+        .config-section {
+            display: none;
+        }
+
+        .config-section.active {
+            display: block;
+        }
+
+        .config-section-header {
+            background: #f5f5f5;
+            padding: 2rem 3rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .config-section-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: #333;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .config-section-description {
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .config-section-content {
+            padding: 3rem;
+        }
+
+        /* Boutons Magento */
+        .action-primary {
+            background: #eb5202;
+            border: 1px solid #eb5202;
+            color: #fff;
+            padding: 1rem 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-primary:hover {
+            background: #ba4000;
+            border-color: #ba4000;
+        }
+
+        .action-primary:disabled {
+            background: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .action-secondary {
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 1rem 2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 0;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-secondary:hover {
+            border-color: #999;
+            background: #f5f5f5;
+        }
+
+        /* Messages Magento */
+        .messages {
+            margin-bottom: 2rem;
+        }
+
+        .message {
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .message-success {
+            border-left-color: #79a22e;
+            background: #f0f8e4;
+            color: #3d4a00;
+        }
+
+        .message-error {
+            border-left-color: #e22626;
+            background: #fdf2f2;
+            color: #333;
+        }
+
+        .message-warning {
+            border-left-color: #ffb84d;
+            background: #fff8e6;
+            color: #663d00;
+        }
+
+        .message-info {
+            border-left-color: #006bb4;
+            background: #f0f8ff;
+            color: #003d66;
+        }
+
+        /* Formulaires Magento */
+        .admin__fieldset {
+            margin-bottom: 3rem;
+        }
+
+        .admin__legend {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin__field {
+            margin-bottom: 2.5rem;
+            display: grid;
+            grid-template-columns: 25rem 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .admin__field-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.4rem;
+            padding-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin__field-label.required::after {
+            content: ' *';
+            color: #e22626;
+        }
+
+        .admin__field-control {
+            position: relative;
+        }
+
+        .admin__control-text,
+        .admin__control-textarea,
+        .admin__control-select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 1px solid #ccc;
+            font-size: 1.4rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .admin__control-text:focus,
+        .admin__control-textarea:focus,
+        .admin__control-select:focus {
+            outline: none;
+            border-color: #006bb4;
+            box-shadow: 0 0 0 1px #006bb4;
+        }
+
+        .admin__control-textarea {
+            resize: vertical;
+            min-height: 8rem;
+        }
+
+        .admin__control-select {
+            background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") no-repeat right 1rem center/1.5em 1.5em;
+            appearance: none;
+            padding-right: 4rem;
+        }
+
+        /* Checkbox et Radio */
+        .admin__field-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin__control-checkbox,
+        .admin__control-radio {
+            width: 1.8rem;
+            height: 1.8rem;
+            cursor: pointer;
+        }
+
+        .admin__field-option label {
+            cursor: pointer;
+            font-weight: normal;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        /* Tooltips */
+        .field-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            color: #006bb4;
+            font-size: 1.6rem;
+        }
+
+        .field-tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 0.5rem;
+        }
+
+        .field-tooltip:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+            z-index: 1000;
+        }
+
+        /* Field Notes */
+        .admin__field-note {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        /* Path Browser */
+        .path-browser {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .path-browser input {
+            flex: 1;
+        }
+
+        .path-browse-btn {
+            background: #006bb4;
+            color: #fff;
+            border: 1px solid #006bb4;
+            padding: 1rem 1.5rem;
+            font-size: 1.3rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .path-browse-btn:hover {
+            background: #005a9e;
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Test Connection */
+        .test-connection {
+            margin-top: 1rem;
+        }
+
+        .test-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .test-result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .test-result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            background: #f5f5f5;
+            padding: 2rem 3rem;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+        }
+
+        .form-actions-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #eb5202;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .config-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .config-nav {
+                position: static;
+            }
+
+            .admin__field {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .admin__field-label {
+                padding-top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-main {
+                padding: 1.5rem;
+            }
+
+            .config-section-content {
+                padding: 2rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 2rem;
+                align-items: stretch;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="page-main">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="#">Tableau de bord</a></li>
+                    <li><a href="#">Système</a></li>
+                    <li><a href="#">Configuration</a></li>
+                    <li>Flipbook</li>
+                </ul>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title-wrapper">
+                    <h1 class="page-title">Configuration Flipbook</h1>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="messages" id="messages-container" style="display: none;">
+                <!-- Messages dynamiques -->
+            </div>
+
+            <!-- Configuration Layout -->
+            <div class="config-layout">
+                <!-- Navigation Sidebar -->
+                <nav class="config-nav">
+                    <div class="config-nav-header">
+                        ⚙️ Sections
+                    </div>
+                    <ul class="config-nav-list">
+                        <li class="config-nav-item">
+                            <a class="config-nav-link active" data-section="general">
+                                🔧 Paramètres généraux
+                            </a>
+                        </li>
+                        <li class="config-nav-item">
+                            <a class="config-nav-link" data-section="storage">
+                                💾 Stockage et fichiers
+                            </a>
+                        </li>
+                        <li class="config-nav-item">
+                            <a class="config-nav-link" data-section="performance">
+                                ⚡ Performance
+                            </a>
+                        </li>
+                        <li class="config-nav-item">
+                            <a class="config-nav-link" data-section="conversion">
+                                🔄 Conversion PDF
+                            </a>
+                        </li>
+                        <li class="config-nav-item">
+                            <a class="config-nav-link" data-section="security">
+                                🔒 Sécurité
+                            </a>
+                        </li>
+                        <li class="config-nav-item">
+                            <a class="config-nav-link" data-section="interface">
+                                🎨 Interface utilisateur
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Configuration Content -->
+                <div class="config-content">
+                    <form id="config-form">
+                        <!-- Section: Paramètres généraux -->
+                        <section class="config-section active fade-in" id="section-general">
+                            <div class="config-section-header">
+                                <h2 class="config-section-title">
+                                    🔧 Paramètres généraux
+                                </h2>
+                                <p class="config-section-description">
+                                    Configuration de base du module Flipbook
+                                </p>
+                            </div>
+                            <div class="config-section-content">
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        ⚙️ Configuration de base
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Activer le module
+                                            <span class="field-tooltip" data-tooltip="Active ou désactive complètement le module Flipbook">ℹ️</span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="radio" class="admin__control-radio" id="enabled-yes" name="enabled" value="1" checked>
+                                                <label for="enabled-yes">Oui</label>
+                                            </div>
+                                            <div class="admin__field-option">
+                                                <input type="radio" class="admin__control-radio" id="enabled-no" name="enabled" value="0">
+                                                <label for="enabled-no">Non</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Mode debug
+                                            <span class="field-tooltip" data-tooltip="Active les logs détaillés pour le débogage">ℹ️</span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="debug-mode" name="debug_mode" value="1">
+                                                <label for="debug-mode">Activer le mode debug</label>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Attention : Le mode debug peut impacter les performances
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Niveau de log
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="log_level">
+                                                <option value="error">Erreurs uniquement</option>
+                                                <option value="warning">Erreurs et avertissements</option>
+                                                <option value="info" selected>Informations</option>
+                                                <option value="debug">Debug complet</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Email administrateur
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="email" class="admin__control-text" name="admin_email" placeholder="admin@example.com">
+                                            <div class="admin__field-note">
+                                                Email pour recevoir les notifications d'erreurs critiques
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Section: Stockage et fichiers -->
+                        <section class="config-section" id="section-storage">
+                            <div class="config-section-header">
+                                <h2 class="config-section-title">
+                                    💾 Stockage et fichiers
+                                </h2>
+                                <p class="config-section-description">
+                                    Configuration des chemins et stockage des fichiers
+                                </p>
+                            </div>
+                            <div class="config-section-content">
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        📁 Chemins de stockage
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label required">
+                                            Répertoire de données
+                                            <span class="field-tooltip" data-tooltip="Chemin où sont stockées les données des flipbooks">ℹ️</span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="path-browser">
+                                                <input type="text" class="admin__control-text" name="data_path" value="/var/www/html/pub/media/flipbook/data/" required>
+                                                <button type="button" class="path-browse-btn" onclick="browsePath('data_path')">📁 Parcourir</button>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Chemin absolu vers le répertoire de stockage des données
+                                            </div>
+                                            <div class="test-connection">
+                                                <button type="button" class="action-secondary" onclick="testPath('data_path')">
+                                                    🔍 Tester le chemin
+                                                </button>
+                                                <div class="test-result" id="test-data-path"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label required">
+                                            Répertoire temporaire
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="path-browser">
+                                                <input type="text" class="admin__control-text" name="temp_path" value="/tmp/flipbook/" required>
+                                                <button type="button" class="path-browse-btn" onclick="browsePath('temp_path')">📁 Parcourir</button>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Répertoire pour les fichiers temporaires lors de la conversion
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label required">
+                                            Répertoire des miniatures
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="path-browser">
+                                                <input type="text" class="admin__control-text" name="thumbnail_path" value="/var/www/html/pub/media/flipbook/thumbnails/" required>
+                                                <button type="button" class="path-browse-btn" onclick="browsePath('thumbnail_path')">📁 Parcourir</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label required">
+                                            Fichier de mapping
+                                            <span class="field-tooltip" data-tooltip="Fichier JSON contenant la correspondance des pages et métadonnées">ℹ️</span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="path-browser">
+                                                <input type="text" class="admin__control-text" name="mapping_file" value="/var/www/html/var/flipbook/mapping.json" required>
+                                                <button type="button" class="path-browse-btn" onclick="browsePath('mapping_file')">📁 Parcourir</button>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Fichier JSON pour stocker les métadonnées et la structure des flipbooks
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🔐 Permissions des fichiers
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Permissions des répertoires
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="text" class="admin__control-text" name="dir_permissions" value="0755" pattern="[0-7]{4}">
+                                            <div class="admin__field-note">
+                                                Permissions UNIX pour les répertoires créés (format octal)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Permissions des fichiers
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="text" class="admin__control-text" name="file_permissions" value="0644" pattern="[0-7]{4}">
+                                            <div class="admin__field-note">
+                                                Permissions UNIX pour les fichiers créés (format octal)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Section: Performance -->
+                        <section class="config-section" id="section-performance">
+                            <div class="config-section-header">
+                                <h2 class="config-section-title">
+                                    ⚡ Performance
+                                </h2>
+                                <p class="config-section-description">
+                                    Optimisation des performances et ressources système
+                                </p>
+                            </div>
+                            <div class="config-section-content">
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🖥️ Ressources système
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label required">
+                                            Nombre de processeurs
+                                            <span class="field-tooltip" data-tooltip="Nombre de threads/processeurs à utiliser pour la conversion">ℹ️</span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="cpu_cores">
+                                                <option value="auto" selected>Automatique (détection)</option>
+                                                <option value="1">1 processeur</option>
+                                                <option value="2">2 processeurs</option>
+                                                <option value="4">4 processeurs</option>
+                                                <option value="8">8 processeurs</option>
+                                                <option value="16">16 processeurs</option>
+                                            </select>
+                                            <div class="admin__field-note">
+                                                <span class="status-indicator status-success">
+                                                    ✅ Processeurs détectés : <span id="detected-cores">8</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Limite mémoire
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="memory_limit">
+                                                <option value="256M">256 MB</option>
+                                                <option value="512M" selected>512 MB</option>
+                                                <option value="1G">1 GB</option>
+                                                <option value="2G">2 GB</option>
+                                                <option value="4G">4 GB</option>
+                                                <option value="-1">Illimitée</option>
+                                            </select>
+                                            <div class="admin__field-note">
+                                                Limite de mémoire pour les processus de conversion
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Timeout de traitement
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="number" class="admin__control-text" name="processing_timeout" value="300" min="30" max="3600">
+                                            <div class="admin__field-note">
+                                                Temps maximum (en secondes) pour traiter un fichier PDF
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Traitement en arrière-plan
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="background-processing" name="background_processing" value="1" checked>
+                                                <label for="background-processing">Activer le traitement asynchrone</label>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Traite les gros fichiers en arrière-plan via cron
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🗄️ Cache et optimisation
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Cache des miniatures
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="thumbnail-cache" name="thumbnail_cache" value="1" checked>
+                                                <label for="thumbnail-cache">Activer le cache des miniatures</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Durée de vie du cache
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="number" class="admin__control-text" name="cache_lifetime" value="86400" min="3600">
+                                            <div class="admin__field-note">
+                                                Durée en secondes (86400 = 24 heures)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Compression des images
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="image-compression" name="image_compression" value="1" checked>
+                                                <label for="image-compression">Compresser les images générées</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Section: Conversion PDF -->
+                        <section class="config-section" id="section-conversion">
+                            <div class="config-section-header">
+                                <h2 class="config-section-title">
+                                    🔄 Conversion PDF
+                                </h2>
+                                <p class="config-section-description">
+                                    Paramètres de conversion et qualité des images
+                                </p>
+                            </div>
+                            <div class="config-section-content">
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🖼️ Qualité et format
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Résolution DPI
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="dpi_resolution">
+                                                <option value="72">72 DPI (Web)</option>
+                                                <option value="150" selected>150 DPI (Standard)</option>
+                                                <option value="300">300 DPI (Haute qualité)</option>
+                                                <option value="600">600 DPI (Très haute qualité)</option>
+                                            </select>
+                                            <div class="admin__field-note">
+                                                Plus la résolution est élevée, plus les fichiers seront volumineux
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Format de sortie
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="output_format">
+                                                <option value="jpg" selected>JPEG</option>
+                                                <option value="png">PNG</option>
+                                                <option value="webp">WebP</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Qualité JPEG
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="range" class="admin__control-range" name="jpeg_quality" value="85" min="10" max="100" oninput="updateQualityValue(this.value)">
+                                            <div class="admin__field-note">
+                                                Qualité : <span id="quality-value">85</span>% (10 = faible, 100 = maximale)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Largeur maximale
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="number" class="admin__control-text" name="max_width" value="1920" min="800" max="4000">
+                                            <div class="admin__field-note">
+                                                Largeur maximale des images générées (en pixels)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🔧 Options avancées
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Anti-aliasing
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="antialiasing" name="antialiasing" value="1" checked>
+                                                <label for="antialiasing">Activer l'anti-aliasing</label>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Améliore la qualité visuelle mais augmente le temps de traitement
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Préserver les métadonnées
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="preserve-metadata" name="preserve_metadata" value="1">
+                                                <label for="preserve-metadata">Conserver les métadonnées du PDF</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Optimisation automatique
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="auto-optimize" name="auto_optimize" value="1" checked>
+                                                <label for="auto-optimize">Optimiser automatiquement selon la taille du fichier</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Section: Sécurité -->
+                        <section class="config-section" id="section-security">
+                            <div class="config-section-header">
+                                <h2 class="config-section-title">
+                                    🔒 Sécurité
+                                </h2>
+                                <p class="config-section-description">
+                                    Paramètres de sécurité et restrictions d'accès
+                                </p>
+                            </div>
+                            <div class="config-section-content">
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        📄 Restrictions de fichiers
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Taille maximale de fichier
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="max_file_size">
+                                                <option value="10M">10 MB</option>
+                                                <option value="25M">25 MB</option>
+                                                <option value="50M" selected>50 MB</option>
+                                                <option value="100M">100 MB</option>
+                                                <option value="200M">200 MB</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Types MIME autorisés
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <textarea class="admin__control-textarea" name="allowed_mime_types" rows="3">application/pdf</textarea>
+                                            <div class="admin__field-note">
+                                                Un type MIME par ligne
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Extensions autorisées
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="text" class="admin__control-text" name="allowed_extensions" value="pdf">
+                                            <div class="admin__field-note">
+                                                Extensions séparées par des virgules (sans le point)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Scan antivirus
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="antivirus-scan" name="antivirus_scan" value="1">
+                                                <label for="antivirus-scan">Scanner les fichiers uploadés</label>
+                                            </div>
+                                            <div class="admin__field-note">
+                                                Nécessite ClamAV ou un scanner compatible
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🔐 Contrôle d'accès
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Authentification requise
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="require-auth" name="require_auth" value="1">
+                                                <label for="require-auth">Exiger une authentification pour voir les flipbooks</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Watermark
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="enable-watermark" name="enable_watermark" value="1">
+                                                <label for="enable-watermark">Ajouter un watermark sur les pages</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Texte du watermark
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="text" class="admin__control-text" name="watermark_text" placeholder="© Mon Site Web">
+                                            <div class="admin__field-note">
+                                                Texte à afficher en watermark (si activé)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Protection contre le hotlinking
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="hotlink-protection" name="hotlink_protection" value="1" checked>
+                                                <label for="hotlink-protection">Empêcher l'affichage sur d'autres sites</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Section: Interface utilisateur -->
+                        <section class="config-section" id="section-interface">
+                            <div class="config-section-header">
+                                <h2 class="config-section-title">
+                                    🎨 Interface utilisateur
+                                </h2>
+                                <p class="config-section-description">
+                                    Personnalisation de l'apparence et du comportement
+                                </p>
+                            </div>
+                            <div class="config-section-content">
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        🎨 Apparence par défaut
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Thème par défaut
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="default_theme">
+                                                <option value="default" selected>Thème par défaut</option>
+                                                <option value="dark">Thème sombre</option>
+                                                <option value="light">Thème clair</option>
+                                                <option value="modern">Thème moderne</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Couleur principale
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="color" class="admin__control-color" name="primary_color" value="#eb5202">
+                                            <div class="admin__field-note">
+                                                Couleur utilisée pour les éléments d'interface
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Langue par défaut
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <select class="admin__control-select" name="default_language">
+                                                <option value="fr" selected>Français</option>
+                                                <option value="en">English</option>
+                                                <option value="es">Español</option>
+                                                <option value="de">Deutsch</option>
+                                                <option value="it">Italiano</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="admin__fieldset">
+                                    <legend class="admin__legend">
+                                        ⚙️ Options d'affichage par défaut
+                                    </legend>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Barre d'outils
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="default-toolbar" name="default_show_toolbar" value="1" checked>
+                                                <label for="default-toolbar">Afficher par défaut</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Miniatures
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="default-thumbnails" name="default_show_thumbnails" value="1" checked>
+                                                <label for="default-thumbnails">Afficher par défaut</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Mode plein écran
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <div class="admin__field-option">
+                                                <input type="checkbox" class="admin__control-checkbox" id="default-fullscreen" name="default_fullscreen" value="1" checked>
+                                                <label for="default-fullscreen">Disponible par défaut</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field">
+                                        <label class="admin__field-label">
+                                            Défilement automatique
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <input type="number" class="admin__control-text" name="auto_flip_delay" value="5" min="1" max="60">
+                                            <div class="admin__field-note">
+                                                Délai en secondes (0 = désactivé)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Section: Paramètres avancés -->
+
+                    </form>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <div class="form-actions-left">
+                            <button type="button" class="action-secondary" onclick="resetToDefaults()">
+                                🔄 Valeurs par défaut
+                            </button>
+                            <button type="button" class="action-secondary" onclick="exportConfig()">
+                                📤 Exporter la configuration
+                            </button>
+                        </div>
+                        <div class="form-actions-right">
+                            <button type="button" class="action-secondary" onclick="testConfiguration()">
+                                🧪 Tester la configuration
+                            </button>
+                            <button type="submit" class="action-primary" form="config-form">
+                                <span id="save-text">💾 Enregistrer la configuration</span>
+                                <span id="save-spinner" class="spinner" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Configuration par défaut
+        const defaultConfig = {
+            enabled: '1',
+            debug_mode: '0',
+            log_level: 'info',
+            admin_email: '',
+            data_path: '/var/www/html/pub/media/flipbook/data/',
+            temp_path: '/tmp/flipbook/',
+            thumbnail_path: '/var/www/html/pub/media/flipbook/thumbnails/',
+            mapping_file: '/var/www/html/var/flipbook/mapping.json',
+            dir_permissions: '0755',
+            file_permissions: '0644',
+            cpu_cores: 'auto',
+            memory_limit: '512M',
+            processing_timeout: '300',
+            background_processing: '1',
+            thumbnail_cache: '1',
+            cache_lifetime: '86400',
+            image_compression: '1',
+            dpi_resolution: '150',
+            output_format: 'jpg',
+            jpeg_quality: '85',
+            max_width: '1920',
+            antialiasing: '1',
+            preserve_metadata: '0',
+            auto_optimize: '1',
+            max_file_size: '50M',
+            allowed_mime_types: 'application/pdf',
+            allowed_extensions: 'pdf',
+            antivirus_scan: '0',
+            require_auth: '0',
+            enable_watermark: '0',
+            watermark_text: '',
+            hotlink_protection: '1',
+            default_theme: 'default',
+            primary_color: '#eb5202',
+            default_language: 'fr',
+            default_show_toolbar: '1',
+            default_show_thumbnails: '1',
+            default_fullscreen: '1',
+            auto_flip_delay: '5',
+            pdf_command: 'convert -density {dpi} {input} -quality {quality} {output}',
+            imagemagick_path: '/usr/bin/convert',
+            env_variables: '',
+            collect_stats: '1',
+            log_retention: '30',
+            auto_cleanup: '1'
+        };
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            setupNavigation();
+            setupFormHandlers();
+            detectSystemInfo();
+        });
+
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.config-nav-link');
+            const sections = document.querySelectorAll('.config-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Update navigation
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update sections
+                    sections.forEach(s => s.classList.remove('active'));
+                    document.getElementById(`section-${targetSection}`).classList.add('active');
+                });
+            });
+        }
+
+        function setupFormHandlers() {
+            const form = document.getElementById('config-form');
+            form.addEventListener('submit', handleFormSubmit);
+
+            // Quality range slider
+            const qualityRange = document.querySelector('input[name="jpeg_quality"]');
+            if (qualityRange) {
+                qualityRange.addEventListener('input', function() {
+                    updateQualityValue(this.value);
+                });
+            }
+        }
+
+        function detectSystemInfo() {
+            // Simulation de la détection des processeurs
+            document.getElementById('detected-cores').textContent = navigator.hardwareConcurrency || 4;
+        }
+
+        function updateQualityValue(value) {
+            document.getElementById('quality-value').textContent = value;
+        }
+
+        function browsePath(fieldName) {
+            // Simulation du navigateur de fichiers
+            showMessage('🔍 Navigateur de fichiers ouvert...', 'info');
+            // Ici vous intégreriez un vrai navigateur de fichiers
+        }
+
+        function testPath(pathType) {
+            const input = document.querySelector(`input[name="${pathType}"]`);
+            const testResult = document.getElementById(`test-${pathType.replace('_', '-')}`);
+            const path = input.value;
+
+            if (!path) {
+                showTestResult(testResult, false, 'Chemin vide');
+                return;
+            }
+
+            // Simulation du test de chemin
+            showMessage('🔍 Test du chemin en cours...', 'info');
+            
+            setTimeout(() => {
+                const isValid = Math.random() > 0.3; // 70% de chance de succès
+                const message = isValid ? 
+                    `Chemin accessible avec permissions correctes` : 
+                    `Chemin inaccessible ou permissions insuffisantes`;
+                ; 
+                    `Chemin inaccessible ou permissions insuffisantes`;
+                
+                showTestResult(testResult, isValid, message);
+            }, 1500);
+        }
+
+        function testImageMagick() {
+            const testResult = document.getElementById('test-imagemagick');
+            const path = document.querySelector('input[name="imagemagick_path"]').value;
+
+            showMessage('🔍 Test d\'ImageMagick en cours...', 'info');
+            
+            setTimeout(() => {
+                const isValid = Math.random() > 0.2; // 80% de chance de succès
+                const message = isValid ? 
+                    `ImageMagick trouvé et fonctionnel (version 7.1.0)` : 
+                    `ImageMagick non trouvé ou non fonctionnel`;
+                
+                showTestResult(testResult, isValid, message);
+            }, 2000);
+        }
+
+        function showTestResult(element, success, message) {
+            element.className = `test-result ${success ? 'success' : 'error'}`;
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function testConfiguration() {
+            showMessage('🧪 Test de la configuration en cours...', 'info');
+            
+            // Simulation des tests
+            const tests = [
+                'Vérification des chemins...',
+                'Test des permissions...',
+                'Validation des outils système...',
+                'Test de conversion PDF...',
+                'Vérification de la configuration...'
+            ];
+            
+            let currentTest = 0;
+            const interval = setInterval(() => {
+                if (currentTest < tests.length) {
+                    showMessage(`🔍 ${tests[currentTest]}`, 'info');
+                    currentTest++;
+                } else {
+                    clearInterval(interval);
+                    showMessage('✅ Configuration testée avec succès !', 'success');
+                }
+            }, 1000);
+        }
+
+        function resetToDefaults() {
+            if (confirm('Êtes-vous sûr de vouloir restaurer les valeurs par défaut ?')) {
+                const form = document.getElementById('config-form');
+                const formData = new FormData(form);
+                
+                // Réinitialiser tous les champs
+                Object.keys(defaultConfig).forEach(key => {
+                    const field = form.querySelector(`[name="${key}"]`);
+                    if (field) {
+                        if (field.type === 'checkbox' || field.type === 'radio') {
+                            field.checked = defaultConfig[key] === '1' || field.value === defaultConfig[key];
+                        } else {
+                            field.value = defaultConfig[key];
+                        }
+                    }
+                });
+                
+                // Mettre à jour l'affichage de la qualité
+                updateQualityValue(defaultConfig.jpeg_quality);
+                
+                showMessage('🔄 Configuration restaurée aux valeurs par défaut', 'success');
+            }
+        }
+
+        function exportConfig() {
+            const form = document.getElementById('config-form');
+            const formData = new FormData(form);
+            const config = {};
+            
+            // Collecter toutes les valeurs
+            for (let [key, value] of formData.entries()) {
+                config[key] = value;
+            }
+            
+            // Ajouter les checkboxes non cochées
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    config[cb.name] = '0';
+                }
+            });
+            
+            // Créer le fichier JSON
+            const configJson = JSON.stringify(config, null, 2);
+            const blob = new Blob([configJson], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            // Télécharger le fichier
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'flipbook-config.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showMessage('📤 Configuration exportée avec succès', 'success');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const saveBtn = document.querySelector('button[type="submit"]');
+            const saveText = document.getElementById('save-text');
+            const saveSpinner = document.getElementById('save-spinner');
+            
+            // État de chargement
+            saveBtn.disabled = true;
+            saveText.style.display = 'none';
+            saveSpinner.style.display = 'inline-block';
+            
+            // Simulation de la sauvegarde
+            setTimeout(() => {
+                showMessage('💾 Configuration sauvegardée avec succès !', 'success');
+                
+                // Réinitialiser l'état du bouton
+                saveBtn.disabled = false;
+                saveText.style.display = 'inline';
+                saveSpinner.style.display = 'none';
+                
+                // Optionnel : redirection ou actualisation
+                setTimeout(() => {
+                    showMessage('🔄 Application de la nouvelle configuration...', 'info');
+                }, 1000);
+            }, 2000);
+        }
+
+        function showMessage(text, type) {
+            const container = document.getElementById('messages-container');
+            const messageClass = type === 'error' ? 'message-error' : 
+                                type === 'warning' ? 'message-warning' : 
+                                type === 'info' ? 'message-info' : 'message-success';
+            
+            const icon = type === 'error' ? '❌' : 
+                        type === 'warning' ? '⚠️' : 
+                        type === 'info' ? 'ℹ️' : '✅';
+            
+            container.innerHTML = `
+                <div class="message ${messageClass} fade-in">
+                    <span>${icon}</span>
+                    <span>${text}</span>
+                </div>
+            `;
+            container.style.display = 'block';
+
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 5000);
+        }
+
+        // Gestion des raccourcis clavier
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S pour sauvegarder
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('config-form').dispatchEvent(new Event('submit'));
+            }
+            
+            // Ctrl+R pour réinitialiser
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                resetToDefaults();
+            }
+        });
+
+        // Auto-save draft (optionnel)
+        let autoSaveTimeout;
+        function autoSaveDraft() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                const form = document.getElementById('config-form');
+                const formData = new FormData(form);
+                const config = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    config[key] = value;
+                }
+                
+                localStorage.setItem('flipbook-config-draft', JSON.stringify(config));
+                console.log('Configuration sauvegardée en brouillon');
+            }, 2000);
+        }
+
+        // Écouter les changements pour l'auto-save
+        document.addEventListener('input', autoSaveDraft);
+        document.addEventListener('change', autoSaveDraft);
+
+        // Restaurer le brouillon au chargement
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('flipbook-config-draft');
+            if (draft && confirm('Un brouillon de configuration a été trouvé. Voulez-vous le restaurer ?')) {
+                const config = JSON.parse(draft);
+                const form = document.getElementById('config-form');
+                
+                Object.keys(config).forEach(key => {
+                    const field = form.querySelector(`[name="${key}"]`);
+                    if (field) {
+                        if (field.type === 'checkbox' || field.type === 'radio') {
+                            field.checked = config[key] === '1' || field.value === config[key];
+                        } else {
+                            field.value = config[key];
+                        }
+                    }
+                });
+                
+                showMessage('📄 Brouillon restauré', 'info');
+            }
+        });
+    </script>
+</body>
+</html>

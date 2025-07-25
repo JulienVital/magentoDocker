@@ -1,5 +1,5 @@
 <?php
-namespace ActivePublishing\Flipbook\Controller\Adminhtml\Manage;
+namespace ActivePublishing\Flipbook\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -12,7 +12,7 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    const MENU_ID = 'ActivePublishing_Flipbook::manage_flipbook';
+    const MENU_ID = 'ActivePublishing_Flipbook::config_flipbook';
 
     /**
      * @var PageFactory

@@ -25,12 +25,12 @@
        action="flipbook/create" 
        resource="ActivePublishing_Flipbook::create_flipbook"/>
 
-      <add id="ActivePublishing_Flipbook::configuration" 
+      <add id="ActivePublishing_Flipbook::config_flipbook" 
       title="Configuration"
        module="ActivePublishing_Flipbook" 
        parent="ActivePublishing_Flipbook::Flipbook" 
        dependsOnModule="ActivePublishing_Flipbook" 
-       action="flipbook/helloworld" 
-       resource="ActivePublishing_Flipbook::greetings"/>
+       action="flipbook/config" 
+       resource="ActivePublishing_Flipbook::config_flipbook"/>
     </menu>
 </config>
